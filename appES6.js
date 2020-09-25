@@ -35,6 +35,7 @@ class UI {
   deleteCourse(element){
     if(element.classList.contains('delete')){
       element.parentElement.parentElement.remove();
+      return true;
     }
   }
   // showAlert Function
@@ -130,11 +131,11 @@ document.getElementById('course-list').addEventListener('click',function(e){
   const ui = new UI();
 
   // delete Course
-  ui.deleteCourse(e.target);
+  if(ui.deleteCourse(e.target)==true){
+    // delete course from LS
+    Storage.deleteCourse(e.target);
 
-  // delete course from LS
-  Storage.deleteCourse(e.target);
-
-  // Alert function
-  ui.showAlert('the course has been deleted','danger');
+    // Alert function
+    ui.showAlert('the course has been deleted','danger');
+  }
 });
