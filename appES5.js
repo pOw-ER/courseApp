@@ -36,6 +36,20 @@ UI.prototype.deleteCourse = function(element){
   }
 
 }
+UI.prototype.showAlert = function (message,className){
+  var alert = `
+              <div class="alert alert-${className}">
+                ${message}
+              </div>
+              `
+  var row = document.querySelector('.row');
+  // insertAdjacentHTML function parameters = beforeBegin, afterBegin, beforeEnd, afterEnd. wir wollen vor der row element.daher benutzen wir beforeBegin
+  row.insertAdjacentHTML('beforeBegin',alert);
+
+  setTimeout(() => {
+    document.querySelector('.alert').remove();// das Element, das wir nach 5 Sekunden löschen wollen
+  },5000);// 5000 milisecond = 5 second
+}
 
 document.getElementById('new-course').addEventListener('submit',function(e){
   const title = document.getElementById('title').value;
@@ -47,13 +61,18 @@ document.getElementById('new-course').addEventListener('submit',function(e){
 
   // creating UI
   const ui = new UI();
+  if (title==="" || instructor==="" || image===""){
+    ui.showAlert('Please complete the form','warning'); // erste teil message, zweite teil alert Art
+  }
+  else{
+    // add course to list
+    ui.addCourseToList(course);
 
-  // add course to list
-  ui.addCourseToList(course);
+    // clear controls
+    ui.clearControls();
 
-  // clear controls
-  ui.clearControls();
-
+    ui.showAlert('the course has been addes','success');
+  }
 
   e.preventDefault();
 });
@@ -61,4 +80,5 @@ document.getElementById('new-course').addEventListener('submit',function(e){
 document.getElementById('course-list').addEventListener('click',function(e){
   const ui = new UI();
   ui.deleteCourse(e.target);
+  ui.showAlert('the course has been deleted','danger');
 });
